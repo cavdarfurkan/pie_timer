@@ -16,7 +16,7 @@ Customizable Timer package with a pie animation for Flutter.
 This package can render a circular countdown timer with animated pie-shaped progress.
 
 ## Preview
-![preview_full_animation](./gifs/full_animating.gif "Full Animation")
+![preview_full_animation](https://media.giphy.com/media/jEcrJl9d0BClHnt9Tc/giphy.gif "Full Animation")
 
 Please check the bottom for more previews.
 
@@ -88,7 +88,7 @@ A video on how did this package is developed will be uploaded on Youtube soon.
 
 
 # Previews With Controllers
-## Controls With Buttons Preview
-![play_animation](gifs/play.gif "Play Animation")![pause_animation](gifs/pause.gif "Pause Animation")![reset_animation](gifs/reset.gif "Reset Animation")
 ## GestureDetector Preview
-![play_touch](gifs/touch_play.gif "Play Touch")![pause_touch](gifs/touch_pause.gif "Pause Touch")![reset_touch](gifs/touch_reset.gif "Reset Touch")
+![play_touch](https://media.giphy.com/media/7yjldJzbiQbTdDk8n2/giphy.gif "Play Touch")![pause_touch](https://media.giphy.com/media/Xyw67ZRBSPhyMGMGXG/giphy.gif "Pause Touch")![reset_touch](https://media.giphy.com/media/MMxXFI5LbnOh42FLXR/giphy.gif "Reset Touch")
+## Controls With Buttons Preview
+![button_play](https://media.giphy.com/media/kubMen88wVHjYmpphH/giphy.gif "Play Animation")![button_pause](https://media.giphy.com/media/t2JSSPz59P8LftNShE/giphy.gif "Pause Animation")![button_reset](https://media.giphy.com/media/PgsvOlZ1SZOqHrKlFf/giphy.gif "Reset Animation")
