@@ -14,10 +14,8 @@ class PieTimer extends StatefulWidget {
     required this.fillColor,
     this.borderColor,
     this.borderWidth,
-    this.enableShadow = false,
     this.shadowColor = Colors.black,
-    this.shadowBlur = 5.0,
-    this.shadowRadius = 0.0,
+    this.shadowElevation = 0.0,
     this.textStyle,
     this.isReverse = false,
     this.onCompleted,
@@ -51,17 +49,11 @@ class PieTimer extends StatefulWidget {
   /// If null then there will be no border
   final double? borderWidth;
 
-  /// If this option enabled only, defult shadow values are used
-  final bool? enableShadow;
+  /// TODO
+  final Color shadowColor;
 
-  /// Sets `shadowColor`. Default is `Colors.black`.
-  final Color? shadowColor;
-
-  /// Sets `shadowBlur`. Default is 5.0.
-  final double? shadowBlur;
-
-  /// Sets `shadowRadius`. Adds extra radius to original radius of the pie. Default is 0.0
-  final double? shadowRadius;
+  /// TODO
+  final double shadowElevation;
 
   /// Sets the direction of pie progress.
   /// False is Clockwise, True is Anti-Clockwise.
@@ -185,26 +177,28 @@ class _PieTimerState extends State<PieTimer>
           widget.enableTouchControls == true ? _onLongPress() : {},
       child: Stack(
         children: [
-          SizedBox(
-            width: widget.radius * 2,
-            height: widget.radius * 2,
-            child: CustomPaint(
-              foregroundPainter: TimePainter(
-                duration: _timerAnimation.value,
-                textStyle: widget.textStyle,
-              ),
-              painter: PiePainter(
-                radian: _pieAnimation.value,
-                radius: widget.radius,
-                fillColor: widget.fillColor,
-                pieColor: widget.pieColor,
-                isReverse: widget.isReverse,
-                borderColor: widget.borderColor,
-                borderWidth: widget.borderWidth,
-                enableShadow: widget.enableShadow,
-                shadowColor: widget.shadowColor,
-                shadowBlur: widget.shadowBlur,
-                shadowRadius: widget.shadowRadius!,
+          PhysicalModel(
+            color: Colors.black,
+            shape: BoxShape.circle,
+            shadowColor: widget.shadowColor,
+            elevation: widget.shadowElevation,
+            child: SizedBox(
+              width: widget.radius * 2,
+              height: widget.radius * 2,
+              child: CustomPaint(
+                foregroundPainter: TimePainter(
+                  duration: _timerAnimation.value,
+                  textStyle: widget.textStyle,
+                ),
+                painter: PiePainter(
+                  radian: _pieAnimation.value,
+                  radius: widget.radius,
+                  fillColor: widget.fillColor,
+                  pieColor: widget.pieColor,
+                  isReverse: widget.isReverse,
+                  borderColor: widget.borderColor,
+                  borderWidth: widget.borderWidth,
+                ),
               ),
             ),
           ),
@@ -248,10 +242,6 @@ class PiePainter extends CustomPainter {
     required this.isReverse,
     this.borderColor,
     this.borderWidth,
-    this.enableShadow,
-    this.shadowColor,
-    this.shadowBlur,
-    required this.shadowRadius,
   });
 
   // To calculate angle. // Gets _pieAnimation.value
@@ -262,10 +252,6 @@ class PiePainter extends CustomPainter {
   final bool isReverse;
   final Color? borderColor;
   final double? borderWidth;
-  final bool? enableShadow;
-  final Color? shadowColor;
-  final double? shadowBlur;
-  final double shadowRadius;
 
   Path backgroundPath = Path();
 
@@ -282,10 +268,6 @@ class PiePainter extends CustomPainter {
       ..moveTo(center.dx, center.dy)
       ..addOval(Rect.fromCircle(center: center, radius: radius));
 
-    if (enableShadow!) {
-      drawShadow(canvas, center, size);
-    }
-
     drawBackgroundCirlce(canvas, center, paint);
 
     drawPieProgress(canvas, center, paint);
@@ -293,20 +275,6 @@ class PiePainter extends CustomPainter {
     if (borderColor != null && borderWidth != null) {
       drawBorder(canvas, center, paint);
     }
-  }
-
-  /// Shadow
-  void drawShadow(Canvas canvas, Offset center, Size size) {
-    var shadowPath = Path()
-      ..moveTo(center.dx, center.dy)
-      ..addOval(Rect.fromCircle(
-          center: center + const Offset(0.0, 10.0),
-          radius: radius + shadowRadius));
-
-    canvas.save();
-    canvas.translate(0.0, 0.0);
-    canvas.drawShadow(shadowPath, shadowColor!, shadowBlur!, true);
-    canvas.restore();
   }
 
   /// Draw background circle
