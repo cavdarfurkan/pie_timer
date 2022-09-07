@@ -49,10 +49,10 @@ class PieTimer extends StatefulWidget {
   /// If null then there will be no border
   final double? borderWidth;
 
-  /// TODO
+  /// The shadow color.
   final Color shadowColor;
 
-  /// TODO
+  /// Shadow elevation. The value is non-negative.
   final double shadowElevation;
 
   /// Sets the direction of pie progress.

@@ -26,10 +26,8 @@ Please check the bottom for more previews.
 |`fillColor`|`Color`|`required`|*Pie progress color.*|
 |`borderColor`|`Color?`|`null`|*Sets `borderColor`. If null then there will be no border.*|
 |`borderWidth`|`double?`|`null`|*Sets `borderWidth`. If null then there will be no border*|
-|`enableShadow`|`bool?`|`false`|*If this option enabled only, defult shadow values are used*|
-|`shadowColor`|`Color?`|`Colors.black`|*Sets `shadowColor`.*|
-|`shadowBlur`|`double?`|`5.0`|*Sets `shadowBlur`.*|
-|`shadowRadius`|`double?`|`0.0`|*Sets `shadowRadius`. Adds extra radius to original radius of the pie.*|
+|`shadowColor`|`Color`|`Colors.black`|*The shadow color.*|
+|`shadowElevation`|`double`|`0.0`|*Shadow elevation. The value is non-negative.*|
 |`isReverse`|`bool`|`false`|*Sets the direction of pie progress. False is Clockwise, True is Anti-Clockwise.*|
 |`textStyle`|`TextStyle?`|`null`|*`TextStyle` of timer text.*|
 |`enableTouchControls`|`bool?`|`false`|*Enable start, stop, etc. on touch of Pie Widget.*|
@@ -50,10 +48,8 @@ PieTimer(
     pieColor: Colors.black,
     borderColor: Colors.yellow,
     borderWidth: 15,
-    enableShadow: true,
     shadowColor: Colors.black,
-    shadowBlur: 5.0,
-    shadowRadius: 1.0,
+    shadowElevation: 10.0,
     textStyle: const TextStyle(
         color: Colors.white,
         fontSize: 40,
@@ -66,12 +62,12 @@ PieTimer(
 ),
 ```
 ### With `PieAnimationController`
-Please refer to `/example` folder to see how to use.
+Please refer to [/example/main.dart](/example/main.dart) folder to see how to use.
 
 ## Additional information
 Please feel free to contribute.
 
-A video on how did this package is developed will be uploaded on Youtube soon.
+[Watch How It's Developed](https://youtu.be/EB5E8IpBMJ4)
 
 
 # Previews With Controllers

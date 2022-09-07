@@ -59,10 +59,8 @@ class _PieWidgetState extends State<PieWidget>
           pieColor: Colors.black,
           borderColor: Colors.yellow,
           borderWidth: 15,
-          enableShadow: true,
           shadowColor: Colors.black,
-          shadowBlur: 5.0,
-          shadowRadius: 1.0,
+          shadowElevation: 10.0,
           textStyle: const TextStyle(
             color: Colors.white,
             fontSize: 40,
