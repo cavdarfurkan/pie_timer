@@ -23,9 +23,9 @@ class PieTimer extends StatefulWidget {
     this.enableTouchControls = false,
   }) : super(key: key);
 
-  /// To use start, stop, etc. functions of controller for external buttons.
-  /// If not initialized, `enableTouchControls = true` is highly recommended for control inputs.
+  /// To use startAnim, stopAnim, etc. callback functions of controller for external buttons.
   ///
+  /// If not initialized, set the `enableTouchControls = true` for control inputs.
   /// No need for `Duration`
   final PieAnimationController? pieAnimationController;
 
@@ -62,13 +62,10 @@ class PieTimer extends StatefulWidget {
   /// `TextStyle` of timer text.
   final TextStyle? textStyle;
 
-  /// Enable start, stop, etc. on touch of Pie Widget.
+  /// Enable start, stop and reset on touch of Pie Widget.
   ///
   /// Single Tap : Alternate between Start and Pause
   /// Long Press : Reset Timer
-  ///
-  /// Using with your own `PieAnimationController` is not supported.
-  /// Unexpected results may occur.
   final bool? enableTouchControls;
 
   /// Function to run when animation status is completed.
@@ -109,16 +106,21 @@ class _PieTimerState extends State<PieTimer>
     // If animation controller is null, set AnimationController,
     // If not, initialize pieAnimationController as AnimationController.
     if (widget.pieAnimationController != null) {
-      _controller = widget.pieAnimationController as PieAnimationController
-        ..duration = widget.duration;
-      _controller.onTap = () => _onTap();
+      _controller = widget.pieAnimationController as PieAnimationController;
     } else {
       _controller = PieAnimationController(
         vsync: this,
       );
-      _controller.duration = widget.duration;
-      _controller.onTap = () => _onTap();
     }
+
+    _controller.duration = widget.duration;
+
+    _controller.onTap = () => _onTap();
+    _controller.onLongPress = () => _onLongPress();
+
+    _controller.startAnim = () => _startAnim();
+    _controller.stopAnim = () => _stopAnim();
+    _controller.resetAnim = () => _resetAnim();
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -142,33 +144,46 @@ class _PieTimerState extends State<PieTimer>
             .animate(_controller);
   }
 
+  double _opacityVal = 0.0;
   void _startAnim() {
-    _controller.forward();
+    if (!_controller.isAnimating) {
+      _controller.forward();
+      _toggleOpacity(0.0);
+    }
   }
 
   void _stopAnim() {
-    _controller.stop();
+    if (_controller.isAnimating) {
+      _controller.stop();
+      _toggleOpacity(1.0);
+    }
   }
 
   void _resetAnim() {
+    if (_controller.isAnimating) {}
     _controller.reset();
+    _toggleOpacity(0.0);
+
     _startAnim();
   }
 
-  double _opacityVal = 0.0;
   void _onTap() {
     if (_controller.isAnimating) {
       _stopAnim();
-      setState(() => _opacityVal = 1.0);
+      _toggleOpacity(1.0);
     } else {
       _startAnim();
-      setState(() => _opacityVal = 0.0);
+      _toggleOpacity(0.0);
     }
   }
 
   void _onLongPress() {
     _resetAnim();
-    setState(() => _opacityVal = 0.0);
+    _toggleOpacity(0.0);
+  }
+
+  void _toggleOpacity(double value) {
+    setState(() => _opacityVal = value);
   }
 
   @override
@@ -389,10 +404,23 @@ class TimePainter extends CustomPainter {
 }
 
 /// If you want to use PieAnimationController, do it inside the state of a statful widget with Ticker.
+///
+/// Use `VoidCallback?` functions instead of `controller.forward()` etc. to have the stop icon animation.
 class PieAnimationController extends AnimationController {
-  
-  /// Function callback to call _onTap() from outisde context code. (Exemple InkWell)
+  /// Function callback to call _onTap() from outside context code. (Exemple InkWell)
   VoidCallback? onTap;
+
+  /// Function callback to call _onLongPress() from outside context code.
+  VoidCallback? onLongPress;
+
+  /// Function callback to call _startAnim() from outside context code.
+  VoidCallback? startAnim;
+
+  /// Function callback to call _stopAnim() from outside context code.
+  VoidCallback? stopAnim;
+
+  /// Function callback to call _resetAnim() from outside context code.
+  VoidCallback? resetAnim;
 
   PieAnimationController({required super.vsync});
 }
