@@ -12,10 +12,11 @@ Please check the bottom for more previews.
 - Change progress direction, forward or reverse.
 - Customizable colors, widths, radius, shadow and text style.
 - Callback functions when animation is completed or dismissed.
+- Callback functions to start, stop and reset the animation.
 - Custom AnimationController to reach the controller functions.
 - Built-in GestureDetector. Tap to alternate between play and pause. Long tap to reset the animation.
 
-## Parameters
+## PieTimer Parameters
 |Name|Type|Default Value|Description
 |:----------------------|:-----------------------|:-------------|:-------------------------------------------------------------------------------|
 |`key`|`Key`|`null`|*Key for PieTimer.*|
@@ -30,7 +31,7 @@ Please check the bottom for more previews.
 |`shadowElevation`|`double`|`0.0`|*Shadow elevation. The value is non-negative.*|
 |`isReverse`|`bool`|`false`|*Sets the direction of pie progress. False is Clockwise, True is Anti-Clockwise.*|
 |`textStyle`|`TextStyle?`|`null`|*`TextStyle` of timer text.*|
-|`enableTouchControls`|`bool?`|`false`|*Enable start, stop, etc. on touch of Pie Widget.*|
+|`enableTouchControls`|`bool?`|`false`|*Enable start, stop and reset on touch of Pie Widget.*|
 |`onCompleted`|`VoidCallback?`|`null`|*Function to run when animation status is completed.*|
 |`onDismissed`|`VoidCallback?`|`null`|*Function to run when animation status is dismissed.*|
 
@@ -74,9 +75,5 @@ Please feel free to contribute.
 
 [Watch How It's Developed](https://youtu.be/EB5E8IpBMJ4)
 
-
-# Previews With Controllers
-## GestureDetector Preview
+## Controls Preview
 ![play_touch](https://media.giphy.com/media/7yjldJzbiQbTdDk8n2/giphy.gif "Play Touch")![pause_touch](https://media.giphy.com/media/Xyw67ZRBSPhyMGMGXG/giphy.gif "Pause Touch")![reset_touch](https://media.giphy.com/media/MMxXFI5LbnOh42FLXR/giphy.gif "Reset Touch")
-## Controls With Buttons Preview
-![button_play](https://media.giphy.com/media/kubMen88wVHjYmpphH/giphy.gif "Play Animation")![button_pause](https://media.giphy.com/media/t2JSSPz59P8LftNShE/giphy.gif "Pause Animation")![button_reset](https://media.giphy.com/media/PgsvOlZ1SZOqHrKlFf/giphy.gif "Reset Animation")
