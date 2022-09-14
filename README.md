@@ -22,7 +22,7 @@ Please check the bottom for more previews.
 |`pieAnimationController`|`PieAnimationController?`|`null`|*Controls (Start, Pause, Restart) for external buttons.*|
 |`duration`|`Duration`|`required`|*Countdown duration.*|
 |`radius`|`double`|`required`|*To determine the size of the pie.*|
-|`pieColor`|`Color`|`required`|*Background (fill) color of the pie.*|
+|`pieColor`|`Color`|`required`|*Background color of the pie.*|
 |`fillColor`|`Color`|`required`|*Pie progress color.*|
 |`borderColor`|`Color?`|`null`|*Sets `borderColor`. If null then there will be no border.*|
 |`borderWidth`|`double?`|`null`|*Sets `borderWidth`. If null then there will be no border*|
@@ -35,8 +35,13 @@ Please check the bottom for more previews.
 |`onDismissed`|`VoidCallback?`|`null`|*Function to run when animation status is dismissed.*|
 
 ## Getting started
+Run this command:
+```flutter
+flutter pub add pie_timer
+```
+Or add the latest version of `pie_timer` as a dependency in your pubspec.yaml file.
 
-Add pie_timer as a dependency in your pubspec.yaml file.
+Then run ```flutter pub get```
 
 ## Usage
 ### Without the `PieAnimationController`.
@@ -62,7 +67,7 @@ PieTimer(
 ),
 ```
 ### With `PieAnimationController`
-Please refer to [/example/main.dart](/example/main.dart) folder to see how to use.
+Please refer to [/example/main.dart](https://github.com/cavdarfurkan/pie_timer/blob/main/example/main.dart) folder to see how to use.
 
 ## Additional information
 Please feel free to contribute.

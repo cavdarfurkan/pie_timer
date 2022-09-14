@@ -1,6 +1,6 @@
 name: pie_timer
 description: Customizable Timer package with a pie animation. This package can render a circular countdown timer with animated pie-shaped progress.
-version: 1.1.0
+version: 1.1.1
 homepage: https://github.com/cavdarfurkan/pie_timer
 
 environment:
