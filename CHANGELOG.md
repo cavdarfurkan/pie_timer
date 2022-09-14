@@ -1,4 +1,4 @@
-## Version 1.2.2 (14.09.2022)
+## Version 1.2.0 (14.09.2022)
 * VoidCallback onLongPress added to PieAnimationController to call _onLongPress.
 * VoidCallback startAnim added to PieAnimationController to call _startAnim.
 * VoidCallback stopAnim added to PieAnimationController to call _stopAnim.
