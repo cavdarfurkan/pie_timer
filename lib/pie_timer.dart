@@ -35,7 +35,7 @@ class PieTimer extends StatefulWidget {
   /// To determine the size of the pie.
   final double radius;
 
-  /// Background (fill) color of the pie.
+  /// Background color of the pie.
   final Color pieColor;
 
   /// Pie progress color.
@@ -117,27 +117,27 @@ class _PieTimerState extends State<PieTimer>
         duration: widget.duration,
       );
     }
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        onCompleted!();
+      } else if (status == AnimationStatus.dismissed) {
+        onDismissed!();
+      }
+    });
   }
 
   void _initAnims() {
     // Tween(begin: -1.57, end: 4.71);
     _pieAnimation = Tween<double>(begin: -math.pi / 2, end: (3 * math.pi) / 2)
         .animate(_controller)
-      ..addListener(() {})
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          onCompleted!();
-        } else if (status == AnimationStatus.dismissed) {
-          onDismissed!();
-        }
+      ..addListener(() {
+        setState(() {});
       });
 
     _timerAnimation =
         Tween<Duration>(begin: _controller.duration, end: Duration.zero)
-            .animate(_controller)
-          ..addListener(() {
-            setState(() {});
-          });
+            .animate(_controller);
   }
 
   void _startAnim() {
@@ -253,7 +253,7 @@ class PiePainter extends CustomPainter {
   final Color? borderColor;
   final double? borderWidth;
 
-  Path backgroundPath = Path();
+  Path hitTestPath = Path();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -264,7 +264,7 @@ class PiePainter extends CustomPainter {
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.fill;
 
-    backgroundPath
+    hitTestPath
       ..moveTo(center.dx, center.dy)
       ..addOval(Rect.fromCircle(center: center, radius: radius));
 
@@ -280,6 +280,9 @@ class PiePainter extends CustomPainter {
   /// Draw background circle
   void drawBackgroundCirlce(Canvas canvas, Offset center, Paint paint) {
     paint.color = fillColor;
+    var backgroundPath = Path()
+      ..moveTo(center.dx, center.dy)
+      ..addOval(Rect.fromCircle(center: center, radius: radius));
 
     canvas.drawPath(backgroundPath, paint);
   }
@@ -314,7 +317,7 @@ class PiePainter extends CustomPainter {
 
   @override
   bool hitTest(Offset position) {
-    return backgroundPath.contains(position);
+    return hitTestPath.contains(position);
   }
 
   @override
