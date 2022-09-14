@@ -1,3 +1,13 @@
+## Version 1.2.2 (14.09.2022)
+* VoidCallback onLongPress added to PieAnimationController to call _onLongPress.
+* VoidCallback startAnim added to PieAnimationController to call _startAnim.
+* VoidCallback stopAnim added to PieAnimationController to call _stopAnim.
+* VoidCallback resetAnim added to PieAnimationController to call _resetAnim.
+
+## Version 1.1.2 (14.09.2022)
+* VoidCallback onTap added to PieAnimationController to call _onTap.
+* Bug Fix (Stop icon animation)
+
 ## Version 1.1.1 (14.09.2022)
 * Bug fix (Flickering effect with multiple timers)
 

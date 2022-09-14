@@ -78,20 +78,19 @@ class _PieWidgetState extends State<PieWidget>
             IconButton(
               icon: const Icon(Icons.pause),
               onPressed: () {
-                _pieAnimationController.stop();
+                _pieAnimationController.stopAnim?.call();
               },
             ),
             IconButton(
               icon: const Icon(Icons.play_arrow),
               onPressed: () {
-                _pieAnimationController.forward();
+                _pieAnimationController.startAnim?.call();
               },
             ),
             IconButton(
               icon: const Icon(Icons.replay),
               onPressed: () {
-                _pieAnimationController.reset();
-                _pieAnimationController.forward();
+                _pieAnimationController.resetAnim?.call();
               },
             ),
           ],
