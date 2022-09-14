@@ -83,7 +83,7 @@ class PieTimer extends StatefulWidget {
 
 class _PieTimerState extends State<PieTimer>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  late PieAnimationController _controller;
 
   late Animation<double> _pieAnimation;
   late Animation<Duration> _timerAnimation;
@@ -109,13 +109,15 @@ class _PieTimerState extends State<PieTimer>
     // If animation controller is null, set AnimationController,
     // If not, initialize pieAnimationController as AnimationController.
     if (widget.pieAnimationController != null) {
-      _controller = widget.pieAnimationController as AnimationController
+      _controller = widget.pieAnimationController as PieAnimationController
         ..duration = widget.duration;
+      _controller.onTap = () => _onTap();
     } else {
-      _controller = AnimationController(
+      _controller = PieAnimationController(
         vsync: this,
-        duration: widget.duration,
       );
+      _controller.duration = widget.duration;
+      _controller.onTap = () => _onTap();
     }
 
     _controller.addStatusListener((status) {
@@ -388,5 +390,9 @@ class TimePainter extends CustomPainter {
 
 /// If you want to use PieAnimationController, do it inside the state of a statful widget with Ticker.
 class PieAnimationController extends AnimationController {
+  
+  /// Function callback to call _onTap() from outisde context code. (Exemple InkWell)
+  VoidCallback? onTap;
+
   PieAnimationController({required super.vsync});
 }
