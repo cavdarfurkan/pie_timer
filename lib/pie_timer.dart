@@ -1,7 +1,8 @@
 library pie_timer;
 
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 /// Main widget to build `PieTimer`
 class PieTimer extends StatefulWidget {
@@ -12,6 +13,7 @@ class PieTimer extends StatefulWidget {
     required this.radius,
     required this.pieColor,
     required this.fillColor,
+    this.countdownPassed = Duration.zero,
     this.borderColor,
     this.borderWidth,
     this.shadowColor = Colors.black,
@@ -31,6 +33,9 @@ class PieTimer extends StatefulWidget {
 
   /// Countdown duration.
   final Duration duration;
+
+  /// Countdown passed
+  final Duration countdownPassed;
 
   /// To determine the size of the pie.
   final double radius;
@@ -133,7 +138,15 @@ class _PieTimerState extends State<PieTimer>
 
   void _initAnims() {
     // Tween(begin: -1.57, end: 4.71);
-    _pieAnimation = Tween<double>(begin: -math.pi / 2, end: (3 * math.pi) / 2)
+
+    _pieAnimation = Tween<double>(
+            begin: (-math.pi / 2) +
+                (widget.countdownPassed.inSeconds /
+                        (widget.duration.inSeconds +
+                            widget.countdownPassed.inSeconds)) *
+                    2 *
+                    math.pi,
+            end: (3 * math.pi) / 2)
         .animate(_controller)
       ..addListener(() {
         setState(() {});
@@ -145,6 +158,7 @@ class _PieTimerState extends State<PieTimer>
   }
 
   double _opacityVal = 0.0;
+
   void _startAnim() {
     if (!_controller.isAnimating) {
       _controller.forward();
