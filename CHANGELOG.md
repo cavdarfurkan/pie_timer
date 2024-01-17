@@ -1,3 +1,6 @@
+## Version 1.3.0 (17.01.2024)
+* Feature/pie animation start angle change.
+
 ## Version 1.2.0 (14.09.2022)
 * VoidCallback onLongPress added to PieAnimationController to call _onLongPress.
 * VoidCallback startAnim added to PieAnimationController to call _startAnim.

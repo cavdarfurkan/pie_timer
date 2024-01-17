@@ -50,6 +50,7 @@ Then run ```flutter pub get```
 ```dart
 PieTimer(
     duration: const Duration(seconds: 10),
+    countdownPassed: const Duration(seconds: 6),
     radius: 150,
     fillColor: Colors.red,
     pieColor: Colors.black,
