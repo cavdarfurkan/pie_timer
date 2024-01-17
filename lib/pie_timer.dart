@@ -219,27 +219,27 @@ class _PieTimerState extends State<PieTimer>
               ),
             ),
           ),
-          Positioned.fill(
-            child: AnimatedOpacity(
-              opacity: _opacityVal,
-              duration: const Duration(milliseconds: 300),
-              child: ClipOval(
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.color),
-                  child: Icon(
-                    Icons.pause_circle_outline,
-                    color: Colors.white,
-                    size: widget.radius,
-                    shadows: const [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 10.0,
-                        spreadRadius: 5.0,
-                      )
-                    ],
-                  ),
-                ),
+          AnimatedOpacity(
+            opacity: _opacityVal,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              width: widget.radius * 2,
+              height: widget.radius * 2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black.withOpacity(0.5),
+              ),
+              child: Icon(
+                Icons.pause_circle_outline,
+                color: Colors.white,
+                size: widget.radius,
+                shadows: const [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 10.0,
+                    spreadRadius: 5.0,
+                  )
+                ],
               ),
             ),
           ),
