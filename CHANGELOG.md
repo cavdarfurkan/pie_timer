@@ -1,3 +1,6 @@
+## Version 1.3.1 (18.01.2024)
+* Bug fix, the shape of the circular overlay was fixed.
+
 ## Version 1.3.0 (17.01.2024)
 * Feature/pie animation start angle change.
 
