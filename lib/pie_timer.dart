@@ -12,6 +12,7 @@ class PieTimer extends StatefulWidget {
     required this.radius,
     required this.pieColor,
     required this.fillColor,
+    this.countdownPassed = Duration.zero,
     this.borderColor,
     this.borderWidth,
     this.shadowColor = Colors.black,
@@ -31,6 +32,11 @@ class PieTimer extends StatefulWidget {
 
   /// Countdown duration.
   final Duration duration;
+
+  /// Countdown passed duration.
+  ///
+  /// `countdownPassed` must be smaller or equal to `duration`
+  final Duration countdownPassed;
 
   /// To determine the size of the pie.
   final double radius;
@@ -92,6 +98,7 @@ class _PieTimerState extends State<PieTimer>
   void initState() {
     super.initState();
 
+    _validateCountdownPassed();
     _initAnimationController();
     _initAnims();
   }
@@ -100,6 +107,12 @@ class _PieTimerState extends State<PieTimer>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _validateCountdownPassed() {
+    if (widget.countdownPassed > widget.duration) {
+      throw ArgumentError('countdownPassed cannot be greater than duration');
+    }
   }
 
   void _initAnimationController() {
@@ -113,7 +126,7 @@ class _PieTimerState extends State<PieTimer>
       );
     }
 
-    _controller.duration = widget.duration;
+    _controller.duration = widget.duration - widget.countdownPassed;
 
     _controller.onTap = () => _onTap();
     _controller.onLongPress = () => _onLongPress();
@@ -132,8 +145,15 @@ class _PieTimerState extends State<PieTimer>
   }
 
   void _initAnims() {
+    // Used microseconds for accuracy.
+    double passedAngle = widget.countdownPassed.inMicroseconds /
+        widget.duration.inMicroseconds *
+        360.0;
+
     // Tween(begin: -1.57, end: 4.71);
-    _pieAnimation = Tween<double>(begin: -math.pi / 2, end: (3 * math.pi) / 2)
+    _pieAnimation = Tween<double>(
+            begin: ((-90 + passedAngle) * math.pi / 180),
+            end: 270 * math.pi / 180)
         .animate(_controller)
       ..addListener(() {
         setState(() {});
@@ -145,6 +165,7 @@ class _PieTimerState extends State<PieTimer>
   }
 
   double _opacityVal = 0.0;
+
   void _startAnim() {
     if (!_controller.isAnimating) {
       _controller.forward();
