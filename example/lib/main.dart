@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Pie Timer',
       theme: ThemeData.dark(),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('PieTimer'),
-        ),
+        appBar: AppBar(title: const Text('PieTimer')),
         body: const PieWidget(),
       ),
     );
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class PieWidget extends StatefulWidget {
-  const PieWidget({Key? key}) : super(key: key);
+  const PieWidget({super.key});
 
   @override
   State<PieWidget> createState() => _PieWidgetState();
@@ -54,7 +52,7 @@ class _PieWidgetState extends State<PieWidget>
         PieTimer(
           pieAnimationController: _pieAnimationController,
           duration: const Duration(seconds: 10),
-          countdownPassed: const Duration(seconds: 6),
+          countdownPassed: const Duration(seconds: 0),
           radius: 150,
           fillColor: Colors.red,
           pieColor: Colors.black,
@@ -71,6 +69,8 @@ class _PieWidgetState extends State<PieWidget>
           onCompleted: () => {},
           onDismissed: () => {},
           enableTouchControls: true,
+          pauseIcon: Icons.pause,
+          pauseIconColor: Colors.blue,
         ),
         const SizedBox(height: 100),
         Row(

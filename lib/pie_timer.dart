@@ -6,7 +6,7 @@ import 'dart:math' as math;
 /// Main widget to build `PieTimer`
 class PieTimer extends StatefulWidget {
   const PieTimer({
-    Key? key,
+    super.key,
     this.pieAnimationController,
     required this.duration,
     required this.radius,
@@ -22,7 +22,9 @@ class PieTimer extends StatefulWidget {
     this.onCompleted,
     this.onDismissed,
     this.enableTouchControls = false,
-  }) : super(key: key);
+    this.pauseIcon = Icons.pause_circle_outline,
+    this.pauseIconColor = Colors.white,
+  });
 
   /// To use startAnim, stopAnim, etc. callback functions of controller for external buttons.
   ///
@@ -72,13 +74,19 @@ class PieTimer extends StatefulWidget {
   ///
   /// Single Tap : Alternate between Start and Pause
   /// Long Press : Reset Timer
-  final bool? enableTouchControls;
+  final bool enableTouchControls;
 
   /// Function to run when animation status is completed.
   final VoidCallback? onCompleted;
 
   /// Function to run when animation status is dismissed.
   final VoidCallback? onDismissed;
+
+  /// Icon to display when paused.
+  final IconData pauseIcon;
+
+  /// Color of the pause icon.
+  final Color pauseIconColor;
 
   @override
   State<PieTimer> createState() => _PieTimerState();
@@ -91,14 +99,16 @@ class _PieTimerState extends State<PieTimer>
   late Animation<double> _pieAnimation;
   late Animation<Duration> _timerAnimation;
 
-  late VoidCallback? onCompleted = () => widget.onCompleted!();
-  late VoidCallback? onDismissed = () => widget.onDismissed!();
+  late VoidCallback? onCompleted =
+      widget.onCompleted != null ? () => widget.onCompleted!() : null;
+  late VoidCallback? onDismissed =
+      widget.onDismissed != null ? () => widget.onDismissed!() : null;
 
   @override
   void initState() {
     super.initState();
 
-    _validateCountdownPassed();
+    _validateProps();
     _initAnimationController();
     _initAnims();
   }
@@ -109,7 +119,18 @@ class _PieTimerState extends State<PieTimer>
     super.dispose();
   }
 
-  void _validateCountdownPassed() {
+  void _validateProps() {
+    // Validate duration is positive
+    if (widget.duration.inMicroseconds <= 0) {
+      throw ArgumentError('duration must be positive');
+    }
+
+    // Validate radius is positive
+    if (widget.radius <= 0) {
+      throw ArgumentError('radius must be positive');
+    }
+
+    // Validate countdownPassed is not greater than duration
     if (widget.countdownPassed > widget.duration) {
       throw ArgumentError('countdownPassed cannot be greater than duration');
     }
@@ -137,9 +158,13 @@ class _PieTimerState extends State<PieTimer>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        onCompleted!();
+        if (onCompleted != null) {
+          onCompleted!();
+        }
       } else if (status == AnimationStatus.dismissed) {
-        onDismissed!();
+        if (onDismissed != null) {
+          onDismissed!();
+        }
       }
     });
   }
@@ -181,11 +206,14 @@ class _PieTimerState extends State<PieTimer>
   }
 
   void _resetAnim() {
-    if (_controller.isAnimating) {}
+    // Stop animation if it's currently running
+    if (_controller.isAnimating) {
+      _controller.stop();
+    }
     _controller.reset();
     _toggleOpacity(0.0);
 
-    _startAnim();
+    // _startAnim();
   }
 
   void _onTap() {
@@ -210,9 +238,8 @@ class _PieTimerState extends State<PieTimer>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.enableTouchControls == true ? _onTap() : {},
-      onLongPress: () =>
-          widget.enableTouchControls == true ? _onLongPress() : {},
+      onTap: widget.enableTouchControls ? _onTap : null,
+      onLongPress: widget.enableTouchControls ? _onLongPress : null,
       child: Stack(
         children: [
           PhysicalModel(
@@ -248,11 +275,11 @@ class _PieTimerState extends State<PieTimer>
               height: widget.radius * 2,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
               ),
               child: Icon(
-                Icons.pause_circle_outline,
-                color: Colors.white,
+                widget.pauseIcon,
+                color: widget.pauseIconColor,
                 size: widget.radius,
                 shadows: const [
                   BoxShadow(
@@ -306,7 +333,7 @@ class PiePainter extends CustomPainter {
       ..moveTo(center.dx, center.dy)
       ..addOval(Rect.fromCircle(center: center, radius: radius));
 
-    drawBackgroundCirlce(canvas, center, paint);
+    drawBackgroundCircle(canvas, center, paint);
 
     drawPieProgress(canvas, center, paint);
 
@@ -316,7 +343,7 @@ class PiePainter extends CustomPainter {
   }
 
   /// Draw background circle
-  void drawBackgroundCirlce(Canvas canvas, Offset center, Paint paint) {
+  void drawBackgroundCircle(Canvas canvas, Offset center, Paint paint) {
     paint.color = fillColor;
     var backgroundPath = Path()
       ..moveTo(center.dx, center.dy)
@@ -347,10 +374,13 @@ class PiePainter extends CustomPainter {
 
   /// Draw border, it is inner border
   void drawBorder(Canvas canvas, Offset center, Paint paint) {
-    paint.color = borderColor!;
-    paint.strokeWidth = borderWidth!;
-    paint.style = PaintingStyle.stroke;
-    canvas.drawCircle(center, radius - (borderWidth! / 2), paint);
+    // Only proceed if both borderColor and borderWidth are non-null
+    if (borderColor != null && borderWidth != null) {
+      paint.color = borderColor!;
+      paint.strokeWidth = borderWidth!;
+      paint.style = PaintingStyle.stroke;
+      canvas.drawCircle(center, radius - (borderWidth! / 2), paint);
+    }
   }
 
   @override
