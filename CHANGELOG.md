@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.4.1 (25.04.2025)
+
+* Fixed `AnimationController.dispose() called more than once` error when using external controllers
+* Fixed `TooltipState is a SingleTickerProviderStateMixin but multiple tickers were created` error
+* Improved animation listener management to prevent memory leaks
+* Enhanced widget lifecycle handling with proper `didUpdateWidget` implementation
+* Added internal controller tracking to prevent controller disposal conflicts
+
 ## Version 1.4.0 (22.04.2025)
 
 * Updated dependencies.

@@ -95,6 +95,8 @@ class PieTimer extends StatefulWidget {
 class _PieTimerState extends State<PieTimer>
     with SingleTickerProviderStateMixin {
   late PieAnimationController _controller;
+  // Track if the controller is internally created
+  bool _isInternalController = false;
 
   late Animation<double> _pieAnimation;
   late Animation<Duration> _timerAnimation;
@@ -114,8 +116,41 @@ class _PieTimerState extends State<PieTimer>
   }
 
   @override
+  void didUpdateWidget(PieTimer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Check if controller has changed
+    if (widget.pieAnimationController != oldWidget.pieAnimationController) {
+      // Clean up animation listeners
+      _removeAnimListeners();
+      
+      // Clean up the old controller if it was internal
+      if (_isInternalController) {
+        _controller.dispose();
+      }
+      
+      // Initialize with the new controller
+      _initAnimationController();
+      _initAnims();
+    } 
+    // If duration or countdownPassed changed, update the controller
+    else if (widget.duration != oldWidget.duration || 
+             widget.countdownPassed != oldWidget.countdownPassed) {
+      _removeAnimListeners();
+      _controller.duration = widget.duration - widget.countdownPassed;
+      _initAnims();
+    }
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
+    // Clean up animation listeners
+    _removeAnimListeners();
+    
+    // Only dispose the controller if it was created internally
+    if (_isInternalController) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
@@ -141,10 +176,12 @@ class _PieTimerState extends State<PieTimer>
     // If not, initialize pieAnimationController as AnimationController.
     if (widget.pieAnimationController != null) {
       _controller = widget.pieAnimationController as PieAnimationController;
+      _isInternalController = false;
     } else {
       _controller = PieAnimationController(
         vsync: this,
       );
+      _isInternalController = true;
     }
 
     _controller.duration = widget.duration - widget.countdownPassed;
@@ -180,13 +217,21 @@ class _PieTimerState extends State<PieTimer>
             begin: ((-90 + passedAngle) * math.pi / 180),
             end: 270 * math.pi / 180)
         .animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
+      ..addListener(_animationListener);
 
     _timerAnimation =
         Tween<Duration>(begin: _controller.duration, end: Duration.zero)
             .animate(_controller);
+  }
+
+  void _animationListener() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _removeAnimListeners() {
+    _pieAnimation.removeListener(_animationListener);
   }
 
   double _opacityVal = 0.0;

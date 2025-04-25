@@ -20,6 +20,19 @@ Please check below for more previews.
 - Custom AnimationController to access the controller functions.
 - Built-in GestureDetector. Tap to alternate between play and pause. Long tap to reset the animation.
 
+## Controller Management
+
+PieTimer can be used in two ways:
+
+1. **With internal controller**: The widget manages its own controller. This allows using PieTimer within a stateless widget.
+
+2. **With external controller**: You provide your own PieAnimationController. This gives you more control but requires proper lifecycle management in a stateful widget.
+
+When using an external controller:
+- Create the controller in `initState()`
+- Dispose it in `dispose()`
+- Ensure touch controls are enabled if you want to use the widget's built-in touch functionality
+
 ## PieTimer Parameters
 
 | Name                     | Type                      | Default Value                | Description                                                                       |
@@ -57,9 +70,10 @@ Then run `flutter pub get`
 
 ## Usage
 
-### Without the `PieAnimationController`
+### Without the `PieAnimationController` (Stateless Widget)
 
 ```dart
+// Can be used directly in a stateless widget
 PieTimer(
     duration: const Duration(seconds: 10),
     countdownPassed: const Duration(seconds: 6),
@@ -78,15 +92,49 @@ PieTimer(
     isReverse: false,
     onCompleted: () => {},
     onDismissed: () => {},
-    enableTouchControls: true,
+    enableTouchControls: true, // Enable to control the timer with touches
     pauseIcon: Icons.pause,
     pauseIconColor: Colors.blue,
 ),
 ```
 
-### With `PieAnimationController`
+### With `PieAnimationController` (Stateful Widget)
 
-Please refer to the [/example/lib/main.dart](https://github.com/cavdarfurkan/pie_timer/blob/main/example/lib/main.dart) file to see how to use.
+```dart
+class PieWidgetState extends State<PieWidget> with SingleTickerProviderStateMixin {
+  late PieAnimationController _pieAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Create the controller in initState
+    _pieAnimationController = PieAnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // Properly dispose the controller when done
+    _pieAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PieTimer(
+      pieAnimationController: _pieAnimationController,
+      duration: const Duration(seconds: 10),
+      radius: 150,
+      fillColor: Colors.red,
+      pieColor: Colors.black,
+      // Other properties...
+      // Note: enableTouchControls can be false if you control the timer
+      // externally with buttons using _pieAnimationController
+    );
+  }
+}
+```
+
+For a complete example, please refer to the [/example/lib/main.dart](https://github.com/cavdarfurkan/pie_timer/blob/main/example/lib/main.dart) file.
 
 ## Additional information
 
